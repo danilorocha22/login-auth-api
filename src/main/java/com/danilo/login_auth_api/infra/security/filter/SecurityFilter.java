@@ -1,4 +1,4 @@
-package com.danilo.login_auth_api.infra.security;
+package com.danilo.login_auth_api.infra.security.filter;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -12,7 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.danilo.login_auth_api.domain.entities.User;
 import com.danilo.login_auth_api.domain.repositories.UserRepository;
-import com.danilo.login_auth_api.infra.service.TokenService;
+import com.danilo.login_auth_api.infra.security.service.TokenService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

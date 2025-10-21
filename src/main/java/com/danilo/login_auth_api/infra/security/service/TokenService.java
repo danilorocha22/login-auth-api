@@ -1,4 +1,4 @@
-package com.danilo.login_auth_api.infra.service;
+package com.danilo.login_auth_api.infra.security.service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

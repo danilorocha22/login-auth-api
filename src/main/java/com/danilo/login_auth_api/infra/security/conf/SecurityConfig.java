@@ -1,4 +1,4 @@
-package com.danilo.login_auth_api.infra.conf;
+package com.danilo.login_auth_api.infra.security.conf;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.danilo.login_auth_api.infra.security.SecurityFilter;
-import com.danilo.login_auth_api.infra.service.CustomUserDetailsService;
+import com.danilo.login_auth_api.infra.security.filter.SecurityFilter;
+import com.danilo.login_auth_api.infra.security.service.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity

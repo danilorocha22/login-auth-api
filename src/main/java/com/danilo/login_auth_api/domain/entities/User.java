@@ -1,7 +1,6 @@
 package com.danilo.login_auth_api.domain.entities;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,9 +23,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(unique = true)
+    private String email;
 
-    @Embedded
-    private UserAuth userAuth;
+    @Column(nullable = false)
+    private String password;
 }
