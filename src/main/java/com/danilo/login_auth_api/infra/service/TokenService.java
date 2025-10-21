@@ -1,4 +1,4 @@
-package com.danilo.login_auth_api.infra.security;
+package com.danilo.login_auth_api.infra.service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -19,7 +19,6 @@ public class TokenService {
     private String secret;
 
     public String generateToken(User user) {
-
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 

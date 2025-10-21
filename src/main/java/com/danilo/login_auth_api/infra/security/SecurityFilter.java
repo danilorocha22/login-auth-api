@@ -1,7 +1,6 @@
 package com.danilo.login_auth_api.infra.security;
 
 import java.io.IOException;
-import java.security.Security;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.danilo.login_auth_api.domain.entities.UserAuth;
-import com.danilo.login_auth_api.domain.repositories.UserAuthRepository;
+import com.danilo.login_auth_api.domain.entities.User;
+import com.danilo.login_auth_api.domain.repositories.UserRepository;
+import com.danilo.login_auth_api.infra.service.TokenService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,7 +26,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
 
     @Autowired
-    private UserAuthRepository userAuthRepository;
+    private UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -35,10 +35,10 @@ public class SecurityFilter extends OncePerRequestFilter {
         var login = tokenService.validatetoken(token);
 
         if (login != null) {
-            UserAuth userAuth = this.userAuthRepository.findByEmail(login)
+            User user = this.userRepository.findByEmail(login)
                     .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
             var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-            var authentication = new UsernamePasswordAuthenticationToken(userAuth, null, authorities);
+            var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
@@ -50,7 +50,6 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (authHeader == null)
             return null;
         return authHeader.replace("Bearer ", "");
-
     }
 
 }
