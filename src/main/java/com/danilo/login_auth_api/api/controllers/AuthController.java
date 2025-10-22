@@ -42,6 +42,7 @@ public class AuthController {
         return ResponseEntity.ok(new LoginResponse(user.getEmail(), token));
     }
 
+    @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
         Optional<User> userOpt = userRepository.findByEmail(registerRequest.email());
 
@@ -56,6 +57,7 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(registerRequest.password()));
         user = userRepository.save(user);
         var token = tokenService.generateToken(user);
+        System.out.printf("Usuário cadastrado com sucesso: %s\n", user.getName());
         return ResponseEntity.ok(new LoginResponse(user.getName(), token));
     }
 }
