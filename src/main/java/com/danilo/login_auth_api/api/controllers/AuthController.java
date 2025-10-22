@@ -1,5 +1,7 @@
 package com.danilo.login_auth_api.api.controllers;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.danilo.login_auth_api.api.input.LoginRequest;
+import com.danilo.login_auth_api.api.input.RegisterRequest;
 import com.danilo.login_auth_api.api.output.LoginResponse;
 import com.danilo.login_auth_api.domain.entities.User;
 import com.danilo.login_auth_api.domain.repositories.UserRepository;
@@ -37,5 +40,22 @@ public class AuthController {
         var user = userOpt.get();
         var token = tokenService.generateToken(user);
         return ResponseEntity.ok(new LoginResponse(user.getEmail(), token));
+    }
+
+    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
+        Optional<User> userOpt = userRepository.findByEmail(registerRequest.email());
+
+        if (userOpt.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("E-mail ja cadastrado.");
+        }
+
+        var user = new User();
+        user.setName(registerRequest.name());
+        user.setEmail(registerRequest.email());
+        user.setPassword(passwordEncoder.encode(registerRequest.password()));
+        user = userRepository.save(user);
+        var token = tokenService.generateToken(user);
+        return ResponseEntity.ok(new LoginResponse(user.getName(), token));
     }
 }
