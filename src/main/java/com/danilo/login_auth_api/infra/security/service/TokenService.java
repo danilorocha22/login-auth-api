@@ -29,7 +29,7 @@ public class TokenService {
                     .sign(algorithm);
 
         } catch (JWTCreationException e) {
-            throw new RuntimeException("Erro ao gerar token", e);
+            throw new JWTCreationException("Erro ao gerar token", e);
         }
 
     }

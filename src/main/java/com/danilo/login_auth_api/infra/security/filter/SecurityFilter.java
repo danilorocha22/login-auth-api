@@ -1,9 +1,10 @@
 package com.danilo.login_auth_api.infra.security.filter;
 
+import static java.util.Objects.nonNull;
+
 import java.io.IOException;
 import java.util.Collections;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,15 +20,14 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class SecurityFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private UserRepository userRepository;
+    private final TokenService tokenService;
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
@@ -36,7 +36,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         var login = tokenService.validatetoken(token);
 
-        if (login != null) {
+        if (nonNull(login)) {
             User user = this.userRepository.findByEmail(login)
                     .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
             var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
